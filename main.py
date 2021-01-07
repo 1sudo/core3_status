@@ -52,41 +52,32 @@ class ServerStatus:
 
         return data.decode('utf-8')
 
-    def parse_status(self, data):
+    def construct_influx_object(self, data):
         server_name = data.split("<name>")[1].split("</name>")[0]
         status = data.split("<status>")[1].split("</status>")[0]
         uptime = data.split("<uptime>")[1].split("</uptime>")[0]
         players_connected = data.split("<connected>")[1].split("</connected>")[0]
         max_players = data.split("<max>")[1].split("</max>")[0]
         total_players = data.split("<total>")[1].split("</total>")[0]
-
-        return {"server": server_name, "status": status, "uptime": uptime, 
-                "connected": players_connected, "max": max_players, "total": total_players}
-
-    def construct_influx_object(self, data):
         the_time = datetime.utcnow().isoformat()
 
-        data = [{
-            "measurement": data["server"],
-            "status": data["status"],
+        return [{
+            "measurement": server_name,
+            "status": status,
             "time": the_time,
             "fields": {
-                "connected": int(data["connected"]),
-                "uptime": int(data["uptime"]),
-                "max": int(data["max"]),
-                "total": int(data["total"])
+                "connected": int(players_connected),
+                "uptime": int(uptime),
+                "max": int(max_players),
+                "total": int(total_players)
             }
         }]
-
-        return data
 
     def write_to_db(self):
         for server in self.server_list:
             data = self.construct_influx_object(
-                self.parse_status(
-                    self.get_status(
-                        server["ip"], server["port"]
-                    )
+                self.get_status(
+                    server["ip"], server["port"]
                 )
             )
 
