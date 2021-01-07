@@ -83,8 +83,8 @@ class ServerStatus:
     def write_to_db(self):
         for server in self.server_list:
             data = self.construct_influx_object(
-                status.parse_status(
-                    status.get_status(
+                self.parse_status(
+                    self.get_status(
                         server["ip"], server["port"]
                     )
                 )
