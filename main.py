@@ -8,38 +8,14 @@ class ServerStatus:
         self.db = InfluxDBClient(host='localhost', port=8086)
         self.db.switch_database('swgservers')
         self.server_list = [
-            {
-                "ip": "login.swgemu.com", # SWGEmu
-                "port": 32755
-            },
-            {
-                "ip": "198.50.227.105", # Sentinel's Republic
-                "port": 44455
-            },
-            {
-                "ip": "51.79.97.56", # Bloodfin
-                "port": 44455
-            },
-            {
-                "ip": "tarkinlogin.ddns.net", # Tarkin's Revenge
-                "port": 44455
-            },
-            {
-                "ip": "ns525055.ip-158-69-123.net", # Remastered
-                "port": 44455
-            },
-            {
-                "ip": "live.projectcarbonite.com", # Project Carbonite
-                "port": 44455
-            },
-            {
-                "ip": "34.83.18.233", # SWG Intended
-                "port": 44455
-            },
-            {
-                "ip": "74.208.129.128", # SWG AoTC (Dauntless)
-                "port": 44455
-            }
+            { "ip": "login.swgemu.com", "port": 32755 }, # SWGEmu
+            { "ip": "198.50.227.105", "port": 44455 }, # Sentinel's Republic
+            { "ip": "51.79.97.56", "port": 44455 }, # Bloodfin
+            { "ip": "tarkinlogin.ddns.net", "port": 44455 }, # Tarkin's Revenge
+            { "ip": "ns525055.ip-158-69-123.net", "port": 44455 }, # Remastered
+            { "ip": "live.projectcarbonite.com", "port": 44455 }, # Project Carbonite
+            { "ip": "34.83.18.233", "port": 44455 }, # SWG Intended
+            { "ip": "74.208.129.128", "port": 44455 } # SWG AoTC (Dauntless)
         ]
 
     def get_status(self, TCP_IP, TCP_PORT):
