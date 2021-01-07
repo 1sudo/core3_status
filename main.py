@@ -1,5 +1,6 @@
 from influxdb import InfluxDBClient
 import socket, time, json
+from datetime import datetime
 
 class ServerStatus:
 
@@ -63,19 +64,17 @@ class ServerStatus:
                 "connected": players_connected, "max": max_players, "total": total_players}
 
     def construct_influx_object(self, data):
-        the_time = round(time.time())
+        the_time = datetime.utcnow().isoformat()
 
         data = [{
             "measurement": data["server"],
             "status": data["status"],
-            "tags": {
-                "connected": data["connected"]
-            },
             "time": the_time,
             "fields": {
-                "uptime": data["uptime"],
-                "max": data["max"],
-                "total": data["total"]
+                "connected": int(data["connected"]),
+                "uptime": int(data["uptime"]),
+                "max": int(data["max"]),
+                "total": int(data["total"])
             }
         }]
 
@@ -90,8 +89,8 @@ class ServerStatus:
                     )
                 )
             )
-            result = self.db.write_points(data)
-            print(result)
+
+            self.db.write_points(data)
     
 if __name__ == "__main__":
     status = ServerStatus()
