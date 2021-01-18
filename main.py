@@ -9,7 +9,7 @@ class ServerStatus:
         self.db.switch_database('swgservers')
         self.server_list = [
             { "ip": "login.swgemu.com", "port": 32755 }, # SWGEmu
-            { "ip": "198.50.227.105", "port": 44455 }, # Sentinel's Republic
+            { "ip": "198.50.200.67", "port": 44455 }, # Sentinel's Republic
             { "ip": "51.79.97.56", "port": 44455 }, # Bloodfin
             { "ip": "tarkinlogin.ddns.net", "port": 44455 }, # Tarkin's Revenge
             { "ip": "ns525055.ip-158-69-123.net", "port": 44455 }, # Remastered
@@ -50,14 +50,17 @@ class ServerStatus:
         }]
 
     def write_to_db(self):
-        for server in self.server_list:
-            data = self.construct_influx_object(
-                self.get_status(
-                    server["ip"], server["port"]
+        try:
+            for server in self.server_list:
+                data = self.construct_influx_object(
+                    self.get_status(
+                        server["ip"], server["port"]
+                    )
                 )
-            )
 
-            self.db.write_points(data)
+                self.db.write_points(data)
+        except:
+            print("Unable to connect to server")
     
 if __name__ == "__main__":
     status = ServerStatus()
